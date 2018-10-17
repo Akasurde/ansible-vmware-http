@@ -50,8 +50,8 @@
       with_items: "{{ vTags.json.value }}"
 
     - name: Create a list of tags which is associated with {{ vm_name }}
-      set_fact: something="{{ something|default([]) + [ item.json.value.name ] }}"
+      set_fact: vm_tag_list="{{ vm_tag_list|default([]) + [ item.json.value.name ] }}"
       with_items: "{{ attached_tags.results }}"
 
     - debug:
-        msg: "{{ something }}"
+        msg: "{{ vm_tag_list }}"
