@@ -1,0 +1,14 @@
+---
+- name: Gather all host system for vCenter
+  gather_facts: no
+  vars_files:
+    - vcenter_vars.yml
+  hosts: localhost
+  tasks:
+    - name: Login task
+      include_tasks: login.yml
+
+    - name: Print names of ESXi host system in the given vCenter
+      debug:
+        msg: "{{ item.name }}"
+      with_items: "{{ vchosts.json.value }}"

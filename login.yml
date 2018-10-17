@@ -1,0 +1,20 @@
+---
+- name: Login into vCenter
+  uri:
+    url: https://{{ vcenter_server }}/rest/com/vmware/cis/session
+    force_basic_auth: yes
+    validate_certs: "{{ validate_certs }}"
+    method: POST
+    user: "{{ vcenter_user }}"
+    password: "{{ vcenter_pass }}"
+  register: login
+
+- name: Get Hosts from vCenter
+  uri:
+    url: https://{{ vcenter_server }}/rest/vcenter/host
+    force_basic_auth: yes
+    validate_certs: "{{ validate_certs }}"
+    headers:
+      Cookie: "{{ login.set_cookie }}"
+  register: vchosts
+

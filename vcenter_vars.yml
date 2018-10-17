@@ -1,0 +1,11 @@
+---
+# Common variables
+- validate_certs: no
+
+# vCenter related details
+- vcenter_server: 10.65.223.114
+- vcenter_user: administrator@vsphere.local
+- vcenter_pass: Esxi@123$%
+
+# VMware object related details
+- datacenter: DC0
