@@ -1,0 +1,38 @@
+---
+- name: Gather cluster information for vCenter
+  gather_facts: no
+  vars_files:
+    - vcenter_vars.yml
+  hosts: localhost
+  tasks:
+    - name: Login task
+      include_tasks: login.yml
+
+    - name: Get clusters from vCenter
+      uri:
+        url: https://{{ vcenter_server }}/rest/vcenter/cluster
+        force_basic_auth: yes
+        validate_certs: "{{ validate_certs }}"
+        headers:
+          Cookie: "{{ login.set_cookie }}"
+      register: vClusters
+
+    - name: Print names of clusters in the given vCenter
+      set_fact:
+        cluster_id: "{{ item.cluster }}"
+      vars:
+          cluster_id_query: "[?name == '{{ cluster_name }}']"
+      with_items: "{{ vClusters.json.value }}"
+
+    - name: Get cluster info from vCenter
+      uri:
+        url: https://{{ vcenter_server }}/rest/vcenter/cluster/{{ cluster_id }}
+        force_basic_auth: yes
+        validate_certs: "{{ validate_certs }}"
+        headers:
+          Cookie: "{{ login.set_cookie }}"
+      register: vCluster_info
+
+    - name: Print cluster's resource pool name
+      debug:
+        msg: "{{ vCluster_info.json.value['resource_pool'] }}"

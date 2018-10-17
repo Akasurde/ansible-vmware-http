@@ -1,0 +1,23 @@
+---
+- name: Gather all datacenters for vCenter
+  gather_facts: no
+  vars_files:
+    - vcenter_vars.yml
+  hosts: localhost
+  tasks:
+    - name: Login task
+      include_tasks: login.yml
+
+    - name: Get datacenters from vCenter
+      uri:
+        url: https://{{ vcenter_server }}/rest/vcenter/datacenter
+        force_basic_auth: yes
+        validate_certs: "{{ validate_certs }}"
+        headers:
+          Cookie: "{{ login.set_cookie }}"
+      register: vDatacenters
+
+    - name: Print names of datacenters in the given vCenter
+      debug:
+        msg: "{{ item.name }}"
+      with_items: "{{ vDatacenters.json.value }}"

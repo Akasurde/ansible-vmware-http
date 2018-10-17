@@ -9,3 +9,4 @@
 
 # VMware object related details
 - datacenter: DC0
+- cluster_name: DC0_C1
