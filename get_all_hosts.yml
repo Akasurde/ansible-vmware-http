@@ -8,6 +8,15 @@
     - name: Login task
       include_tasks: login.yml
 
+    - name: Get Hosts from vCenter
+      uri:
+        url: https://{{ vcenter_server }}/rest/vcenter/host
+        force_basic_auth: yes
+        validate_certs: "{{ validate_certs }}"
+        headers:
+          Cookie: "{{ login.set_cookie }}"
+      register: vchosts
+
     - name: Print names of ESXi host system in the given vCenter
       debug:
         msg: "{{ item.name }}"
