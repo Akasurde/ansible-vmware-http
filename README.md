@@ -8,7 +8,7 @@ Requirements
 
 VMware HTTP APIs are supported in vCenter 6.5 and onwards. So, in order to use these playbooks you need to have vCenter version greater than equal to 6.5.
 
-If you are going to use ``[Pyvmomi](https://github.com/vmware/pyvmomi)`` based (XMLRPC based) modules then you need to install ``Pyvmomi`` using ``pip install pyvmomi``.
+If you are going to use [Pyvmomi](https://github.com/vmware/pyvmomi) based (XMLRPC based) [modules](https://docs.ansible.com/ansible/latest/modules/list_of_cloud_modules.html#vmware) then you need to install ``Pyvmomi`` using ``pip install pyvmomi``.
 
 
 Examples
@@ -16,7 +16,7 @@ Examples
 
 Example Ansible playbook to manage VMware using HTTP APIs:
 
-    - [Get a list of all ESXi hosts available in the given datacenter](./get_all_hosts.yml)
+- [Get a list of all ESXi hosts available in the given datacenter](../get_all_hosts.yml)
 
 
 Caveats
