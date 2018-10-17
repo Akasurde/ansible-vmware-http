@@ -1,6 +1,7 @@
 ---
 # Common variables
 - validate_certs: no
+- debug_flag: no
 
 # vCenter related details
 - vcenter_server: 10.65.223.114
@@ -10,3 +11,4 @@
 # VMware object related details
 - datacenter: DC0
 - cluster_name: DC0_C1
+- vm_name: rhel_7_template

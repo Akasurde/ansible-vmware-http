@@ -25,6 +25,7 @@ Example Ansible playbook to manage VMware using HTTP APIs:
 - [Get a list of all categories available](../master/get_all_categories.yml)
 - [Get a list of all tags available](../master/get_all_tags.yml)
 - [Get information about the given Cluster](../master/get_cluster_info.yml)
+- [Get a list of tags attached to the given virtual machine](../master/get_all_tags_from_virtual_machine.yml)
 
 
 Caveats

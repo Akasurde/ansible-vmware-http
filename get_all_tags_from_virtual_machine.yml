@@ -1,0 +1,57 @@
+---
+- name: Gather all tags attached to the given virtual machine
+  gather_facts: no
+  vars_files:
+    - vcenter_vars.yml
+  hosts: localhost
+  tasks:
+    - name: Login task
+      include_tasks: login.yml
+
+    - name: Get virtual machine id for {{ vm_name }}
+      uri:
+        url: https://{{ vcenter_server }}/rest/vcenter/vm?filter.names={{ vm_name }}
+        force_basic_auth: yes
+        validate_certs: "{{ validate_certs }}"
+        headers:
+          Cookie: "{{ login.set_cookie }}"
+      register: vVMs
+
+    - set_fact:
+        vm_id: "{{ vVMs.json.value[0].vm }}"
+
+    - debug:
+        msg: "{{ vm_id }}"
+      when: debug_flag
+
+    - name: Get tags attached to virtual machine {{ vm_name }}
+      uri:
+        url: https://{{ vcenter_server }}/rest/com/vmware/cis/tagging/tag-association?~action=list-attachable-tags
+        force_basic_auth: yes
+        validate_certs: "{{ validate_certs }}"
+        method: POST
+        body_format: json
+        body:
+          object_id:
+            id: '{{ vm_id }}'
+            type: 'VirtualMachine'
+        headers:
+          Cookie: "{{ login.set_cookie }}"
+      register: vTags
+
+    - name: Get tag names for collected tags
+      uri:
+        url: https://{{ vcenter_server }}/rest//com/vmware/cis/tagging/tag/id:{{ item }}
+        force_basic_auth: yes
+        validate_certs: "{{ validate_certs }}"
+        headers:
+          Cookie: "{{ login.set_cookie }}"
+      register: attached_tags
+      with_items: "{{ vTags.json.value }}"
+
+    - name: Create a list of tags which is associated with {{ vm_name }}
+      set_fact: something="{{ something|default([]) + [ item.json.value.name ] }}"
+      with_items: "{{ attached_tags.results }}"
+
+    - debug:
+        msg: "{{ something }}"
